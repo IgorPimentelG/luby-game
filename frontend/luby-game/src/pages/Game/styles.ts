@@ -11,6 +11,14 @@ export const RootContainer = styled.div`
 	align-items: center;
 	height: 80vh;
 	padding: 130px 30px 30px 0;
+
+	@media(max-width: 870px) {
+		padding: 250px 0 80px 0;
+	}
+
+	@media(max-width: 400px) {
+		padding: 300px 0 50px 0;
+	}
 `;
 
 export const Counter = styled(BaseText)`
@@ -28,6 +36,10 @@ export const LabelStatement = styled(BaseText)`
 	width: 60%;
 	text-align: center;
 	text-transform: uppercase;
+
+	@media(max-width: 870px) {
+		width: 90%;
+	}
 `;
 
 export const RadioButton = styled.input<any>`
@@ -70,11 +82,23 @@ export const ContainerOptions = styled.div`
 	display: grid;
 	grid-template-columns: repeat(2, 400px);
 	margin-bottom: 20px;
+
+	@media(max-width: 870px) {
+		grid-template-columns: repeat(1, 400px);
+	}
+
+	@media(max-width: 500px) {
+		grid-template-columns: repeat(1, 300px);
+	}
 `;
 
-export const ContainerButtons = styled.div`
+export const ContainerButton = styled.div`
 	display: flex;
 	width: 20%;
+
+	@media(max-width: 870px) {
+		width: 200px;
+	}
 `;
 
 export const Space = styled.span`

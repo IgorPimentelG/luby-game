@@ -19,7 +19,7 @@ import {
 	RadioButton,
 	RootContainer,
 	Title,
-	ContainerButtons,
+	ContainerButton,
 	Space,
 	ContainerAnimation,
 	Label
@@ -173,11 +173,9 @@ const GamePage = () => {
 				<Title>pergunta</Title>
 				<Counter>{questionNumber} / 5</Counter>
 
-				{ selectedQuestion && (
-					<LabelStatement>
-						{selectedQuestion.statement}
-					</LabelStatement>
-				)}
+				<LabelStatement>
+					{selectedQuestion.statement}
+				</LabelStatement>
 
 				<ContainerOptions>
 					{ selectedQuestion?.options.map((option) => (
@@ -196,12 +194,12 @@ const GamePage = () => {
 					))}
 				</ContainerOptions>
 
-				<ContainerButtons>
+				<ContainerButton>
 					<Button
 						label="Prosseguir"
 						handler={nextQuestionHandler}
 					/>
-				</ContainerButtons>
+				</ContainerButton>
 			</>)}
 
 			{/* Exibir resultado */}

@@ -27,6 +27,10 @@ export const Label = styled.h1`
 	margin-left: 10px;
 	text-transform: uppercase;
 	color: ${({theme}) => theme.colors.text.secondary};
+
+	@media(max-width: 450px) {
+		font-size: 1.2rem;
+	}
 `;
 
 export const Nav = styled.nav`

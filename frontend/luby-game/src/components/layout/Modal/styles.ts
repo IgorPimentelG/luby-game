@@ -22,6 +22,10 @@ export const Container = styled(BaseContainer)`
 	padding: 20px;
 	width: 20%;
 	background-color: ${({theme}) => theme.colors.background.tertiary};
+
+	@media(max-width: 955px) {
+		width: 200px;
+	}
 `;
 
 export const ContainerOptions = styled.div``;
