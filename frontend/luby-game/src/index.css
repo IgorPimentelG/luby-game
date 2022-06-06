@@ -1,0 +1,38 @@
+@font-face {
+	font-family: "Bebas Neue Regular";
+	src: url("./assets/fonts/BebasNeue-Regular.ttf") local("Bebas Neue Regular");
+}
+
+* {
+	margin: 0;
+	align-items: 0;
+	font-family: "Bebas Neue Regular", sans-serif;
+}
+
+button {
+	cursor: pointer;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+  background-color: #192A32;
+}
+
+a {
+	text-decoration: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

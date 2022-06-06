@@ -1,0 +1,54 @@
+{
+	"questions": [
+		{
+			"statement": "Qual dos seguintes itens possui apenas tipos válidos usados em lógica de programação (tipos primitivos)?",
+			"answerKey": "C",
+			"options": [
+				{ "key": "A", "answer": "Inteiro, Temporal, Caractere, Double" },
+				{ "key": "B", "answer": "Inteiro, Booleano, Tipografia, Double" },
+				{ "key": "C", "answer": "Inteiro, Booleano, Caractere, Double" },
+				{ "key": "D", "answer": "Temporal, Triple, Caractere, Double" }
+			]
+		},
+		{
+			"statement": "Qual dos seguintes itens mostra um laço for (para) escrito corretamente?",
+			"answerKey": "D",
+			"options": [
+				{ "key": "A", "answer": "para contador de 1 ate 10 passo -1 faca" },
+				{ "key": "B", "answer": "para contador de 10 ate 1 passo 1 faca" },
+				{ "key": "C", "answer": "para contador de 10 ate -1 passo 1 faca" },
+				{ "key": "D", "answer": "para contador de 1 ate 10 passo 1 faca" }
+			]
+		},
+		{
+			"statement": "Como funciona um laço while?",
+			"answerKey": "D",
+			"options": [
+				{ "key": "A", "answer": "Um laço while repete o bloco de código associado enquanto um teste lógico realizado retornar falso." },
+				{ "key": "B", "answer": "Um laço while repete o bloco de código associado um número de vezes específico, determinado em sua declaração." },
+				{ "key": "C", "answer": "Um laço while não repete o bloco de código associado enquanto um teste lógico realizado retornar verdadeiro." },
+				{ "key": "D", "answer": "Um laço while repete o bloco de código associado enquanto um teste lógico realizado retornar verdadeiro" }
+			]
+		},
+		{
+			"statement": "Precisamos criar um vetor (array unidimensional) para armazenar 15 valores numéricos relativos aos salários de funcionários de uma empresa. Qual das seguintes instruções deve ser empregada para esse fim em um algoritmo?",
+			"answerKey": "C",
+			"options": [
+				{ "key": "A", "answer": "salarios : vetor [0..15] de real" },
+				{ "key": "B", "answer": "salarios : vetor [1..15] de numeros" },
+				{ "key": "C", "answer": "salarios : vetor [0..14] de real" },
+				{ "key": "D", "answer": "salarios : vetor [0..14] de inteiro" }
+			]
+		},
+		{
+			"statement": "Como podemos definir um Algoritmo?",
+			"answerKey": "A",
+			"options": [
+				{ "key": "A", "answer": "Sequência de instruções ordenadas, finitas e não-ambíguas que são empregadas para executar uma tarefa." },
+				{ "key": "B", "answer": "Sequência de comandos ordenados, infinitos e ambíguos que são empregados para executar uma tarefa." },
+				{ "key": "C", "answer": "Sequência de instruções ordenadas, infinitas e não-ambíguas que são empregadas para executar uma tarefa." },
+				{ "key": "D", "answer": "Sequência de comandos ordenados, infinitos e não-ambíguos que são empregados para executar uma tarefa." }
+			]
+		}
+	]
+}

@@ -1,0 +1,3 @@
+export const INITIAL_LBC = 5;
+export const LBC_GAME = 1;
+export const CONTRACT_ADDRESS = "0x17C8F74a0e025c001942F8bB6072F394c9F61331";
