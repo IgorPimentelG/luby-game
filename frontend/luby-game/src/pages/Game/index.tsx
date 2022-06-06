@@ -5,7 +5,6 @@ import GameContext from "@context/game-context";
 import DataJSON from "@assets/data/questions.json";
 import Lottie from "react-lottie";
 import { Button, Loading } from "@components/ui";
-import { useTheme } from "styled-components";
 import { Question } from "@shared/types/game";
 import { useNavigate } from "react-router-dom";
 import { contract } from "@shared/services/contract";
@@ -29,7 +28,6 @@ import {
 const GamePage = () => {
 
 	const navigate = useNavigate();
-	const theme = useTheme();
 	const ctxGame = useContext(GameContext);
 	const questions: Question[] = DataJSON.questions;
 
@@ -202,10 +200,6 @@ const GamePage = () => {
 					<Button
 						label="Prosseguir"
 						handler={nextQuestionHandler}
-						colors={{
-							background: theme.colors.background.secondary,
-							shadow: theme.colors.shadow.secondary
-						}}
 					/>
 				</ContainerButtons>
 			</>)}
@@ -226,10 +220,6 @@ const GamePage = () => {
 					<Button
 						label="Sacar"
 						handler={claimBalanceHandler}
-						colors={{
-							background: theme.colors.background.secondary,
-							shadow: theme.colors.shadow.secondary
-						}}
 					/>
 				</Option>
 			)}

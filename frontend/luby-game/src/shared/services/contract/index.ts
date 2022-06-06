@@ -25,7 +25,6 @@ const contract = () => {
 	}
 
 	function startGame(value: number): Promise<void> {
-
 		instance.methods.approve(INITIAL_LBC).send({
 			from: user.walletAddress
 		}).on("receipt", () => {
@@ -68,24 +67,33 @@ const contract = () => {
 		});
 	}
 
-	function withDraw() {
-		// instance.methods.withDraw().send({
-		// 	from: user.walletAddress
-		// });
+	function withdraw(ownerAddress: string): Promise<number> {
+		return new Promise((resolve, reject) => {
+			instance.methods.withdraw().send({
+				from: ownerAddress
+			}).on("error", () => {
+				reject("Aconteceu um erro ao tentar transferir o saldo");
+			});
+
+			instance.events.WithDraw()
+				.on("data", (event: any) => {
+					const balance = event.returnValues.amount;
+					resolve(balance);
+				});
+		});
 	}
 
 	function claimBalance(bonus: number): Promise<void> {
-		instance.methods.claimBalance(bonus).send({
-			from: user.walletAddress
-		});
-
 		return new Promise((resolve, reject) => {
+			instance.methods.claimBalance(bonus).send({
+				from: user.walletAddress
+			}).on("error", () => {
+				reject("Houve um erro ao tentar sacar o seu saldo");
+			});
+
 			instance.events.ClaimBalance()
 				.on("data", () => {
 					resolve();
-				})
-				.on("error", () => {
-					reject();
 				});
 		});
 	}
@@ -101,7 +109,7 @@ const contract = () => {
 		startGame,
 		correctAnswer,
 		incorrectAnswer,
-		withDraw,
+		withdraw,
 		claimBalance,
 		getBalanceIndividual
 	};

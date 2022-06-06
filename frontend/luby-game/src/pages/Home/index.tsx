@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import GameContext from "@context/game-context";
 import { INITIAL_LBC } from "@constants";
 import { useForm } from "react-hook-form";
-import { useTheme } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button, Input, Loading } from "@components/ui";
 import { registerSchema } from "@shared/schemas";
@@ -14,7 +13,6 @@ import { Form, LabelError, RootContainer, Title } from "./styles";
 
 const HomePage = () => {
 
-	const theme = useTheme();
 	const navigate = useNavigate();
 	const ctxGame = useContext(GameContext);
 
@@ -116,13 +114,7 @@ const HomePage = () => {
 					}}
 				/>
 
-				<Button
-					label="iniciar"
-					colors={{
-						background: theme.colors.background.secondary,
-						shadow: theme.colors.shadow.secondary
-					}}
-				/>
+				<Button label="iniciar" />
 			</Form>
 		</RootContainer>
 	);

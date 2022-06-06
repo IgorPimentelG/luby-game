@@ -32,6 +32,7 @@ export const LabelError = styled.p`
 export const Title = styled.h1`
 	margin-bottom: 30px;
 	text-transform: uppercase;
+	text-align: center;
 	color: ${({theme}) => theme.colors.text.secondary};
 `;
 

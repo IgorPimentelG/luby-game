@@ -7,9 +7,9 @@ export const Container  = styled.button<any>`
 	border: none;
 	border-radius: 10px;
 	width: 100%;
-	${({colors}) => `
-		background-color: ${colors.background};
-		box-shadow: 0 5px 2px ${colors.shadow};
+	${({theme}) => `
+		background-color: ${theme.colors.background.secondary};
+		box-shadow: 0 5px 2px ${theme.colors.shadow.secondary};
 	`};
 `;
 

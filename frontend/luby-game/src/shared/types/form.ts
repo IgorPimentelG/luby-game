@@ -6,6 +6,10 @@ export type FormRegister = {
 	name: string;
 }
 
+export type FormAdmin = {
+	address: string;
+}
+
 export type ConfigInput = {
 	label: string;
 	name: string;

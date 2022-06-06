@@ -18,13 +18,19 @@ const Header = () => {
 			</Logo>
 
 			<Nav>
-				{ pathname !== "/game" ? (
-					<Link to="#">
-						<LabelLink>ADMIN</LabelLink>
-					</Link>
-				) : (
-					<Balance/>
-				)}
+				{ pathname !== "/game" ?
+					pathname === "/admin" ? (
+						<Link to="/home">
+							<LabelLink>HOME</LabelLink>
+						</Link>
+					) : (
+						<Link to="/admin">
+							<LabelLink>ADMIN</LabelLink>
+						</Link>
+					)
+					: (
+						<Balance/>
+					)}
 			</Nav>
 		</Container>
 	);

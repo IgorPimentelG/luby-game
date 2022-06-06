@@ -4,7 +4,6 @@ import { FaCoins } from "react-icons/fa";
 import { useTheme } from "styled-components";
 import { Container, Label } from "./styles";
 
-
 const Balance: React.FC<{ value?: number }> = ({ value }) => {
 
 	const theme = useTheme();
