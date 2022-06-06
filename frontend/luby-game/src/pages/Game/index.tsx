@@ -4,7 +4,7 @@ import { LBC_GAME } from "@constants";
 import GameContext from "@context/game-context";
 import DataJSON from "@assets/data/questions.json";
 import Lottie from "react-lottie";
-import { Button } from "@components/ui";
+import { Button, Loading } from "@components/ui";
 import { useTheme } from "styled-components";
 import { Question } from "@shared/types/game";
 import { useNavigate } from "react-router-dom";
@@ -44,18 +44,24 @@ const GamePage = () => {
 	const [userAnswer, setUserAnswer] = useState<string>();
 	const [animationFeedback, setAnimationFeedback] = useState<any>();
 	const [userPoints, setUserPoints] = useState({ correct: 0, incorrect: 0 });
+	const [isLoading, setIsLoading] = useState(false);
 
 	/**
 	 * Verificar se existe um usuário registrado para iniciar o game, caso contrário,
 	 * o usuário será redirecionado para a página home.
 	 */
 	useEffect(() => {
+		setIsLoading(true);
 		if( !ctxGame.user.walletAddress ) {
 			navigate("/home");
 		} else {
-			startGame(ctxGame.user.balance);
+			startGame(ctxGame.user.balance).then(() => {
+				setIsLoading(false);
+			}).catch((error) => {
+				console.log(error);
+			});
 		}
-	}, [ctxGame]);
+	}, []);
 
 	function nextQuestionHandler() {
 		if( userAnswer ) {
@@ -101,15 +107,13 @@ const GamePage = () => {
 				});
 			});
 		}
-
-		setUserAnswer("");
 	}
 
 	function desistHandler() {
 		//
 	}
 
-	return( !ctxGame.user.walletAddress ? <></> : (
+	return( isLoading ? <Loading isEnable={isLoading}/> : (
 		<RootContainer>
 			<Header/>
 

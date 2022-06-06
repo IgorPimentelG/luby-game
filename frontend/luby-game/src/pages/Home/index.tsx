@@ -4,7 +4,7 @@ import { INITIAL_LBC } from "@constants";
 import { useForm } from "react-hook-form";
 import { useTheme } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { Button, Input } from "@components/ui";
+import { Button, Input, Loading } from "@components/ui";
 import { registerSchema } from "@shared/schemas";
 import { FormRegister } from "@shared/types/form";
 import { Header, Modal } from "@components/layout";
@@ -19,6 +19,7 @@ const HomePage = () => {
 	const ctxGame = useContext(GameContext);
 	const { mintLBC } = contract();
 	const [error, setError] = useState<string>("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	const {
 		register,
@@ -37,11 +38,12 @@ const HomePage = () => {
 			}).catch((error) => {
 				setError(error);
 			});
+			setIsLoading(false);
 		}
 	}, [ctxGame.user]);
 
 	async function confirmHandler(data: FormRegister) {
-
+		setIsLoading(true);
 		const walletAddress = await connecUsertWallet();
 
 		if( walletAddress ) {
@@ -80,6 +82,8 @@ const HomePage = () => {
 				label: error,
 				onConfirm: confirmModalHandler,
 			}}/>
+
+			<Loading isEnable={isLoading}/>
 
 			<Title>Start Game</Title>
 
