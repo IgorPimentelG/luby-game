@@ -13,11 +13,21 @@ const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
 	const [userData, setUserData] = useState(initialState);
 
-	function registerUser(name: string, walletAddress: string) {
-		setUserData({
-			name,
-			walletAddress,
-			balance: INITIAL_LBC
+	function updateName(name: string) {
+		setUserData((currentState) => {
+			return {
+				...currentState,
+				name,
+			};
+		});
+	}
+
+	function updateWalletAddress(walletAddress: string) {
+		setUserData((currentState) => {
+			return {
+				...currentState,
+				walletAddress,
+			};
 		});
 	}
 
@@ -38,7 +48,8 @@ const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 		user: {
 			...userData
 		},
-		registerUser,
+		updateName,
+		updateWalletAddress,
 		updateBalance,
 		clearUser
 	};

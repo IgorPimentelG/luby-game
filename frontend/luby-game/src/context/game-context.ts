@@ -6,11 +6,12 @@ const GameContext = React.createContext({
 
 	user: {
 		name: "",
-		balance: 5,
+		balance: 0,
 		walletAddress: ""
 	},
 
-	registerUser: (name: string, walletAddress: string) => {},
+	updateName: (name: string) => {},
+	updateWalletAddress: (walletAddress: string) => {},
 	updateBalance: (balue: number) => {},
 	clearUser: () => {}
 });

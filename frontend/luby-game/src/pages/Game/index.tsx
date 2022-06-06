@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { useContext, useEffect, useState } from "react";
-import { LBC_GAME } from "@constants";
+import { BONUS_GAME, INITIAL_LBC, LBC_GAME } from "@constants";
 import GameContext from "@context/game-context";
 import DataJSON from "@assets/data/questions.json";
 import Lottie from "react-lottie";
@@ -9,7 +9,7 @@ import { useTheme } from "styled-components";
 import { Question } from "@shared/types/game";
 import { useNavigate } from "react-router-dom";
 import { contract } from "@shared/services/contract";
-import { Balance, Header } from "@components/layout";
+import { Balance, Header, Modal } from "@components/layout";
 import { correctAnimation, errorAnimation } from "@assets/animations";
 import {
 	ContainerOptions,
@@ -36,7 +36,9 @@ const GamePage = () => {
 	const {
 		startGame,
 		correctAnswer,
-		incorrectAnswer
+		incorrectAnswer,
+		claimBalance,
+		getBalanceIndividual
 	} = contract();
 
 	const [questionNumber, setQuestionNumber] = useState(1);
@@ -45,6 +47,8 @@ const GamePage = () => {
 	const [animationFeedback, setAnimationFeedback] = useState<any>();
 	const [userPoints, setUserPoints] = useState({ correct: 0, incorrect: 0 });
 	const [isLoading, setIsLoading] = useState(false);
+	const [messageModal, setMessageModal] = useState("");
+	const [balancePlayer, setBalancePlayer] = useState(0);
 
 	/**
 	 * Verificar se existe um usuário registrado para iniciar o game, caso contrário,
@@ -55,13 +59,31 @@ const GamePage = () => {
 		if( !ctxGame.user.walletAddress ) {
 			navigate("/home");
 		} else {
-			startGame(ctxGame.user.balance).then(() => {
+			startGame(INITIAL_LBC).then(() => {
 				setIsLoading(false);
 			}).catch((error) => {
-				console.log(error);
+				setIsLoading(false);
+				setMessageModal(error);
 			});
 		}
 	}, []);
+
+	/**
+	 * Quando não existir mais questões disponíveis, o saldo final do game
+	 * será obitido para aparesentar ao usuário
+	 */
+	useEffect(() => {
+		const fetchBalancePlayer = async () => {
+			setIsLoading(true);
+			const balance = await getBalanceIndividual();
+			setBalancePlayer(balance);
+			setIsLoading(false);
+		};
+
+		if( !selectedQuestion ) {
+			fetchBalancePlayer();
+		}
+	}, [selectedQuestion]);
 
 	function nextQuestionHandler() {
 		if( userAnswer ) {
@@ -86,36 +108,57 @@ const GamePage = () => {
 	function verifyAnswer() {
 		if( userAnswer === selectedQuestion.answerKey ) {
 			correctAnswer(LBC_GAME).then(() => {
-				ctxGame.updateBalance(ctxGame.user.balance + LBC_GAME);
+				ctxGame.updateBalance(ctxGame.user.balance + 1);
 				setAnimationFeedback(correctAnimation);
 				setUserPoints((currentState) => {
 					return {
 						...currentState,
-						correct: currentState.correct + 1
+						correct: currentState.correct + 1,
 					};
 				});
 			});
 		} else {
 			incorrectAnswer(LBC_GAME).then(() => {
-				ctxGame.updateBalance(ctxGame.user.balance - LBC_GAME);
+				ctxGame.updateBalance(ctxGame.user.balance - 1);
 				setAnimationFeedback(errorAnimation);
 				setUserPoints((currentState) => {
 					return {
 						...currentState,
-						incorrect: currentState.incorrect + 1
+						incorrect: currentState.incorrect + 1,
 					};
 				});
 			});
 		}
 	}
 
-	function desistHandler() {
-		//
+	function claimBalanceHandler() {
+		setIsLoading(true);
+
+		claimBalance(BONUS_GAME)
+			.then(() => {
+				setMessageModal("Saldo debitado na sua conta com sucesso!");
+				setIsLoading(false);
+			}).catch(() => {
+				setMessageModal("Não foi possível reivindicar o seu saldo");
+				setIsLoading(false);
+			});
+	}
+
+	function confirmModalHandler() {
+		setMessageModal("");
+		ctxGame.clearUser();
+		navigate("/home", { replace: true });
 	}
 
 	return( isLoading ? <Loading isEnable={isLoading}/> : (
 		<RootContainer>
 			<Header/>
+
+			<Modal config={{
+				isOpen: !!messageModal,
+				label: messageModal,
+				onConfirm: confirmModalHandler
+			}}/>
 
 			{ animationFeedback && (
 				<ContainerAnimation>
@@ -164,15 +207,6 @@ const GamePage = () => {
 							shadow: theme.colors.shadow.secondary
 						}}
 					/>
-					<Space/>
-					<Button
-						label="Desistir"
-						handler={desistHandler}
-						colors={{
-							background: theme.colors.background.quaternary,
-							shadow: theme.colors.shadow.quaternary
-						}}
-					/>
 				</ContainerButtons>
 			</>)}
 
@@ -185,13 +219,13 @@ const GamePage = () => {
 
 					<Space/>
 
-					<Label>Sua carteira:</Label>
+					<Label>Total de Bônus:</Label>
 					<Space/>
-					<Balance/>
+					<Balance value={balancePlayer}/>
 
 					<Button
 						label="Sacar"
-						handler={() => {}}
+						handler={claimBalanceHandler}
 						colors={{
 							background: theme.colors.background.secondary,
 							shadow: theme.colors.shadow.secondary

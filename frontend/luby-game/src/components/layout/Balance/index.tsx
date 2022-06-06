@@ -5,7 +5,7 @@ import { useTheme } from "styled-components";
 import { Container, Label } from "./styles";
 
 
-const Balance = () => {
+const Balance: React.FC<{ value?: number }> = ({ value }) => {
 
 	const theme = useTheme();
 	const ctxGame = useContext(GameContext);
@@ -13,7 +13,7 @@ const Balance = () => {
 	return(
 		<Container>
 			<FaCoins color={theme.colors.background.secondary}/>
-			<Label>LBC {ctxGame.user.balance.toLocaleString("pt-BR")}</Label>
+			<Label>LBC {value ? value : ctxGame.user.balance}</Label>
 		</Container>
 	);
 };

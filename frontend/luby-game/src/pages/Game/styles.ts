@@ -74,7 +74,7 @@ export const ContainerOptions = styled.div`
 
 export const ContainerButtons = styled.div`
 	display: flex;
-	width: 40%;
+	width: 20%;
 `;
 
 export const Space = styled.span`

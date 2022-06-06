@@ -69,19 +69,29 @@ const contract = () => {
 	}
 
 	function withDraw() {
-		instance.methods.withDraw().send({
-			from: user.walletAddress
-		});
+		// instance.methods.withDraw().send({
+		// 	from: user.walletAddress
+		// });
 	}
 
-	function claimBalance(bonus: number) {
+	function claimBalance(bonus: number): Promise<void> {
 		instance.methods.claimBalance(bonus).send({
 			from: user.walletAddress
+		});
+
+		return new Promise((resolve, reject) => {
+			instance.events.ClaimBalance()
+				.on("data", () => {
+					resolve();
+				})
+				.on("error", () => {
+					reject();
+				});
 		});
 	}
 
 	function getBalanceIndividual() {
-		instance.methods.getBalanceIndividual().send({
+		return instance.methods.getBalanceIndividual().call({
 			from: user.walletAddress
 		});
 	}

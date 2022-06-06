@@ -17,6 +17,7 @@ const HomePage = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const ctxGame = useContext(GameContext);
+
 	const { mintLBC } = contract();
 	const [error, setError] = useState<string>("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -28,27 +29,36 @@ const HomePage = () => {
 	} = useForm<FormRegister>({ resolver: yupResolver(registerSchema) });
 
 	/**
-	 * Monitorar quando o usuário realizar o registro,
-	 * para iniciar o game
+	 * Obter endereço da MetaMask do usuário ao iniciar
 	 */
 	useEffect(() => {
-		if( ctxGame.user.name && ctxGame.user.walletAddress ) {
+		setIsLoading(true);
+
+		const fetchWalletAddress = async () => {
+			const walletAddress = await connecUsertWallet();
+
+			if( walletAddress ) {
+				ctxGame.updateWalletAddress(walletAddress);
+			}
+
+			setIsLoading(false);
+		};
+
+		fetchWalletAddress();
+	}, []);
+
+
+	async function confirmHandler(data: FormRegister) {
+
+		if( ctxGame.user.walletAddress ) {
+			const { name } = data;
+			ctxGame.updateName(name);
+
 			mintLBC(INITIAL_LBC).then(() => {
 				navigate("/game");
 			}).catch((error) => {
 				setError(error);
 			});
-			setIsLoading(false);
-		}
-	}, [ctxGame.user]);
-
-	async function confirmHandler(data: FormRegister) {
-		setIsLoading(true);
-		const walletAddress = await connecUsertWallet();
-
-		if( walletAddress ) {
-			const { name } = data;
-			ctxGame.registerUser(name, walletAddress);
 		}
 	}
 
@@ -68,10 +78,6 @@ const HomePage = () => {
 		}
 	}
 
-	function confirmModalHandler() {
-		setError("");
-	}
-
 	return(
 		<RootContainer>
 
@@ -80,7 +86,7 @@ const HomePage = () => {
 			<Modal config={{
 				isOpen: !!error,
 				label: error,
-				onConfirm: confirmModalHandler,
+				onConfirm: () => setError("")
 			}}/>
 
 			<Loading isEnable={isLoading}/>
@@ -106,7 +112,7 @@ const HomePage = () => {
 						name: "lubyCoin",
 						label: "LubyCoin",
 						register,
-						attributes: { value: "5 LBC", readonly: true }
+						attributes: { value: `${ctxGame.user.balance} LBC`, readonly: true }
 					}}
 				/>
 
