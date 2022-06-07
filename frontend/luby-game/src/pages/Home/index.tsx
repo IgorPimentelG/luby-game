@@ -54,8 +54,8 @@ const HomePage = () => {
 
 			mintLBC(INITIAL_LBC).then(() => {
 				navigate("/game");
-			}).catch((error) => {
-				setError(error);
+			}).catch(() => {
+				setError("Não foi possível receber a doação de LubyCoin");
 			});
 		}
 	}
@@ -108,7 +108,7 @@ const HomePage = () => {
 				<Input
 					config={{
 						name: "lubyCoin",
-						label: "LubyCoin",
+						label: "LubyCoin recebido",
 						register,
 						attributes: { value: `${ctxGame.user.balance} LBC`, readonly: true }
 					}}

@@ -1,43 +1,74 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Input, Loading } from "@components/ui";
-import { useNavigate } from "react-router-dom";
-import { FormAdmin } from "@shared/types/form";
 import { Header, Modal } from "@components/layout";
 import { contract } from "@shared/services/contract";
-import { RootContainer, Form, Title } from "../Home/styles";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Button, Input, Loading } from "@components/ui";
+import { Form, Title, LabelError } from "../Home/styles";
+import { FormTransfer, FormDeposit } from "@shared/types/form";
+import { Container, ContainerForm, RootContainer } from "./styles";
+import { bankDepositSchema, bankTransferSchema } from "@shared/schemas";
 
 const AdminPage = () => {
 
-	const navigate = useNavigate();
-	const { withdraw } = contract();
-	const { register, handleSubmit } = useForm<FormAdmin>();
+	const { withdraw, deposit } = contract();
+
+	const {
+		register: registerTransfer,
+		handleSubmit: handleTransfer,
+		setValue: setValueFormTransfer,
+		formState: { errors: errorsTransfer }
+	} = useForm<FormTransfer>({ resolver: yupResolver(bankTransferSchema) });
+
+	const {
+		register: registerDeposit,
+		handleSubmit: handleDeposit,
+		setValue: setValueFormDeposit,
+		formState: { errors: errorsDeposit }
+	} = useForm<FormDeposit>({ resolver: yupResolver(bankDepositSchema) });
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [configModal, setConfigModal] = useState({ message: "", hasError: false });
+	const [configModal, setConfigModal] = useState({ message: "" });
 
-	function transferHandler(data: FormAdmin) {
+	function transferHandler(data: FormTransfer) {
 		setIsLoading(true);
+
 		withdraw(data.address)
 			.then((balance) => {
 				setConfigModal({
-					message: `Transferência de ${balance} LBC realizada com sucesso!`,
-					hasError: false
+					message: `Transferência de ${balance} LBC realizada com sucesso!`
 				});
 				setIsLoading(false);
 			})
-			.catch((error) => {
-				setConfigModal({ message: error, hasError: true });
+			.catch(() => {
+				setConfigModal({ message: "Não foi possível realizar a transferência!" });
 				setIsLoading(false);
 			});
+
+		setValueFormTransfer("address", "");
+	}
+
+	function depositHandler(data: FormDeposit) {
+		setIsLoading(true);
+
+		const { owner, amount } = data;
+
+		deposit(owner, amount)
+			.then(() => {
+				setConfigModal({ message: "Deposito realizado com sucesso!" });
+				setIsLoading(false);
+			})
+			.catch(() => {
+				setConfigModal({ message: "Não foi possível realizar o deposito!" });
+				setIsLoading(false);
+			});
+
+		setValueFormDeposit("owner", "");
+		setValueFormDeposit("amount", 0);
 	}
 
 	function confirmModalHandler() {
-		if( configModal.hasError ) {
-			setConfigModal({ message: "", hasError: false });
-		} else {
-			navigate("/home");
-		}
+		setConfigModal({ message: "" });
 	}
 
 	return(
@@ -54,19 +85,60 @@ const AdminPage = () => {
 				}}
 			/>
 
-			<Title>Transferir Saldo <br/>da LUBY GAME</Title>
+			<Title>Bank Luby Game</Title>
 
-			<Form onSubmit={handleSubmit(transferHandler)}>
-				<Input
-					config={{
-						name: "address",
-						label: "Confirmação da carteira",
-						register
-					}}
-				/>
+			<Container>
+				<ContainerForm>
+					<Title>Transferir</Title>
 
-				<Button	label="transferir" />
-			</Form>
+					<Form onSubmit={handleTransfer(transferHandler)}>
+						<Input
+							config={{
+								name: "address",
+								label: "Confirmação da carteira",
+								register: registerTransfer
+							}}
+						/>
+						{ errorsTransfer.address && (
+							<LabelError>{errorsTransfer.address.message}</LabelError>
+						)}
+
+						<Button	label="transferir" />
+					</Form>
+				</ContainerForm>
+
+				<ContainerForm>
+					<Title>Depositar</Title>
+
+					<Form onSubmit={handleDeposit(depositHandler)}>
+						<Input
+							config={{
+								name: "owner",
+								label: "Confirmação do proprietário",
+								register: registerDeposit
+							}}
+						/>
+						{ errorsDeposit.owner && (
+							<LabelError>{errorsDeposit.owner.message}</LabelError>
+						)}
+
+						<Input
+							config={{
+								name: "amount",
+								label: "Valor",
+								register: registerDeposit,
+								attributes: { type: "number" }
+							}}
+						/>
+						{ errorsDeposit.amount && (
+							<LabelError>{errorsDeposit.amount.message}</LabelError>
+						)}
+
+						<Button	label="Depositar" />
+					</Form>
+				</ContainerForm>
+			</Container>
+
 		</RootContainer>
 	);
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { BONUS_GAME, INITIAL_LBC, LBC_GAME } from "@constants";
 import GameContext from "@context/game-context";
 import DataJSON from "@assets/data/questions.json";
@@ -169,38 +169,40 @@ const GamePage = () => {
 			)}
 
 			{/* Exibir perguntas */}
-			{ selectedQuestion && (<>
-				<Title>pergunta</Title>
-				<Counter>{questionNumber} / 5</Counter>
+			{ selectedQuestion && (
+				<Fragment>
+					<Title>pergunta</Title>
+					<Counter>{questionNumber} / 5</Counter>
 
-				<LabelStatement>
-					{selectedQuestion.statement}
-				</LabelStatement>
+					<LabelStatement>
+						{selectedQuestion.statement}
+					</LabelStatement>
 
-				<ContainerOptions>
-					{ selectedQuestion?.options.map((option) => (
-						<Option key={option.key}>
-							<RadioButton
-								id={option.key}
-								name="option"
-								type="radio"
-								value={option.key}
-								onChange={changeUserAnswerHandler}
-							/>
-							<LabelAnswer htmlFor={option.key}>
-								{option.answer}
-							</LabelAnswer>
-						</Option>
-					))}
-				</ContainerOptions>
+					<ContainerOptions>
+						{ selectedQuestion?.options.map((option) => (
+							<Option key={option.key}>
+								<RadioButton
+									id={option.key}
+									name="option"
+									type="radio"
+									value={option.key}
+									onChange={changeUserAnswerHandler}
+								/>
+								<LabelAnswer htmlFor={option.key}>
+									{option.answer}
+								</LabelAnswer>
+							</Option>
+						))}
+					</ContainerOptions>
 
-				<ContainerButton>
-					<Button
-						label="Prosseguir"
-						handler={nextQuestionHandler}
-					/>
-				</ContainerButton>
-			</>)}
+					<ContainerButton>
+						<Button
+							label="Prosseguir"
+							handler={nextQuestionHandler}
+						/>
+					</ContainerButton>
+				</Fragment>
+			)}
 
 			{/* Exibir resultado */}
 			{ !selectedQuestion && (

@@ -18,7 +18,8 @@ const contract = () => {
 				from: user.walletAddress
 			}).on("receipt", () => {
 				resolve();
-			}).on("error", () => {
+			}).on("error", (error) => {
+				console.log(error);
 				reject("Aconteceu um erro ao obter LubyCoin");
 			});
 		});
@@ -88,7 +89,7 @@ const contract = () => {
 			instance.methods.claimBalance(bonus).send({
 				from: user.walletAddress
 			}).on("error", () => {
-				reject("Houve um erro ao tentar sacar o seu saldo");
+				reject("Aconteceu um erro ao tentar sacar o seu saldo");
 			});
 
 			instance.events.ClaimBalance()
@@ -104,6 +105,21 @@ const contract = () => {
 		});
 	}
 
+	function deposit(owner: string, amount: number): Promise<void> {
+		return new Promise((resolve, reject) => {
+			instance.methods.deposit(amount).send({
+				from: owner
+			}).on("error", () => {
+				reject("Aconteceu um erro ao realizar o deposito");
+			});
+
+			instance.events.Deposit()
+				.on("data", () => {
+					resolve();
+				});
+		});
+	}
+
 	return{
 		mintLBC,
 		startGame,
@@ -111,7 +127,8 @@ const contract = () => {
 		incorrectAnswer,
 		withdraw,
 		claimBalance,
-		getBalanceIndividual
+		getBalanceIndividual,
+		deposit
 	};
 };
 

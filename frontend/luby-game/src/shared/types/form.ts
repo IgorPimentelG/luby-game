@@ -6,8 +6,13 @@ export type FormRegister = {
 	name: string;
 }
 
-export type FormAdmin = {
+export type FormTransfer = {
 	address: string;
+}
+
+export type FormDeposit = {
+	owner: string;
+	amount: number;
 }
 
 export type ConfigInput = {
